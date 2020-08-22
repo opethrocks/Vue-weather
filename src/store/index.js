@@ -9,6 +9,7 @@ export default new Vuex.Store({
 		currentWeather: null,
 		weatherForecast: null,
 		selectedUnits: "",
+		isForecastActive: false,
 	},
 	mutations: {
 		ADD_WEATHER(state, payload) {
@@ -26,6 +27,11 @@ export default new Vuex.Store({
 		DELETE_CITY(state) {
 			state.currentWeather = null;
 			state.weatherForecast = null;
+		},
+		TOGGLE_FORECAST(state) {
+			state.isForecastActive === false
+				? (state.isForecastActive = true)
+				: (state.isForecastActive = false);
 		},
 	},
 	actions: {
@@ -71,11 +77,15 @@ export default new Vuex.Store({
 		deleteCity({ commit }) {
 			commit("DELETE_CITY");
 		},
+		toggleForecast({ commit }) {
+			commit("TOGGLE_FORECAST");
+		},
 	},
 
 	getters: {
 		currentWeather: (state) => state.currentWeather,
 		weatherForecast: (state) => state.weatherForecast,
 		selectedUnit: (state) => state.selectedUnits,
+		toggleForecast: (state) => state.isForecastActive,
 	},
 });

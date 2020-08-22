@@ -114,7 +114,7 @@ export default {
 
 	methods: {
 		toggleForecast() {
-			this.$emit("showForecast");
+			this.$store.dispatch("toggleForecast");
 		},
 	},
 	computed: {

@@ -41,20 +41,40 @@
 				</div>
 			</div>
 		</div>
+		<div class="container">
+			<current-conditions
+				:forecastWeather="weatherForecast"
+				:currentWeather="currentWeather"
+				:unitSelected="selectedUnit"
+				:isActive="toggleForecast"
+			/>
+		</div>
 	</div>
 </template>
 
 <script>
+import CurrentConditions from "@/components/CurrentConditions.vue";
+import { mapGetters } from "vuex";
+
 export default {
 	name: "Home",
-
+	components: {
+		CurrentConditions,
+	},
 	data() {
 		return {
 			input: null,
 			units: null,
 		};
 	},
-
+	computed: {
+		...mapGetters([
+			"currentWeather",
+			"weatherForecast",
+			"selectedUnit",
+			"toggleForecast",
+		]),
+	},
 	methods: {
 		searchImperial() {
 			this.units = "imperial";

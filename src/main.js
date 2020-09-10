@@ -14,8 +14,20 @@ import {
 	faSun,
 	faLongArrowAltUp,
 	faLongArrowAltDown,
+	faAngleDown,
+	faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+//leaflet, fix icon issue
+import { Icon } from "leaflet";
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+	iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+	iconUrl: require("leaflet/dist/images/marker-icon.png"),
+	shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
 
 library.add(faSearch);
 library.add(faThermometerHalf);
@@ -25,6 +37,8 @@ library.add(faWater);
 library.add(faSun);
 library.add(faLongArrowAltUp);
 library.add(faLongArrowAltDown);
+library.add(faAngleDown);
+library.add(faMapMarkerAlt);
 
 Vue.config.productionTip = false;
 Vue.use(VueSkycons);

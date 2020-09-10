@@ -12,17 +12,18 @@
 						<div v-for="weather in forecast.weather" :key="weather.id">
 							<p class="has-text-weight-medium">
 								{{
-									new Date(forecast.dt_txt).toLocaleTimeString([], {
-										hour: "2-digit",
-										minute: "2-digit",
+									new Date(forecast.dt_txt).toLocaleDateString([], {
+										month: "2-digit",
+										day: "2-digit",
+										year: "2-digit",
 									})
 								}}
 							</p>
 							<p class="has-text-weight-medium">
 								{{
-									new Date(forecast.dt_txt).toLocaleDateString([], {
-										month: "2-digit",
-										day: "2-digit",
+									new Date(forecast.dt_txt).toLocaleTimeString([], {
+										hour: "2-digit",
+										minute: "2-digit",
 									})
 								}}
 							</p>

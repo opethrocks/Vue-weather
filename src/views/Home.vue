@@ -1,13 +1,12 @@
 <template>
 	<div>
+		<div class="flex-container">
+			<figure class="image is-128x128">
+				<img src="@/assets/weather-icon.png" />
+			</figure>
+		</div>
 		<div class="columns is-centered">
 			<div class="column is-one-third">
-				<div class="flex-container">
-					<figure class="image is-128x128">
-						<img src="@/assets/weather-icon.png" />
-					</figure>
-				</div>
-				<h1 class="is-size-1 pb-2">Weather</h1>
 				<div class="field">
 					<div class="control has-icons-left has-icons-right">
 						<input
@@ -41,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="container">
+		<div class="card">
 			<current-conditions
 				:forecastWeather="weatherForecast"
 				:currentWeather="currentWeather"
@@ -54,7 +53,7 @@
 
 <script>
 import CurrentConditions from "@/components/CurrentConditions.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
 	name: "Home",
@@ -63,8 +62,8 @@ export default {
 	},
 	data() {
 		return {
-			input: null,
-			units: null,
+			input: "lake charles",
+			units: "imperial",
 		};
 	},
 	computed: {
@@ -76,13 +75,18 @@ export default {
 		]),
 	},
 	methods: {
+		...mapActions(["currentWeather", "weatherForecast"]),
+		...mapActions({
+			weather: "currentWeather",
+			forecast: "weatherForecast",
+		}),
 		searchImperial() {
 			this.units = "imperial";
-			this.$store.dispatch("currentWeather", {
+			this.weather({
 				city: this.input,
 				unit: this.units,
 			});
-			this.$store.dispatch("weatherForecast", {
+			this.forecast({
 				city: this.input,
 				unit: this.units,
 			});
@@ -90,11 +94,11 @@ export default {
 		},
 		searchMetric() {
 			this.units = "metric";
-			this.$store.dispatch("currentWeather", {
+			this.weather({
 				city: this.input,
 				unit: this.units,
 			});
-			this.$store.dispatch("weatherForecast", {
+			this.forecast({
 				city: this.input,
 				unit: this.units,
 			});
@@ -104,6 +108,18 @@ export default {
 			this.input = null;
 		},
 	},
+	created() {
+		this.units = "imperial";
+		this.weather({
+			city: this.input,
+			unit: this.units,
+		});
+		this.forecast({
+			city: this.input,
+			unit: this.units,
+		});
+		this.input = "";
+	},
 };
 </script>
 
@@ -112,5 +128,8 @@ export default {
 	display: flex;
 	justify-content: center;
 	flex-flow: row wrap;
+}
+.card {
+	margin: 25px 200px 30px 200px;
 }
 </style>

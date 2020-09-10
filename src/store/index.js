@@ -10,6 +10,7 @@ export default new Vuex.Store({
 		weatherForecast: null,
 		selectedUnits: "",
 		isForecastActive: false,
+		mapData: null,
 	},
 	mutations: {
 		ADD_WEATHER(state, payload) {
@@ -20,6 +21,7 @@ export default new Vuex.Store({
 			let data = payload;
 			state.weatherForecast = data;
 		},
+
 		SET_UNIT(state, payload) {
 			let unit = payload;
 			state.selectedUnits = unit;
@@ -54,7 +56,6 @@ export default new Vuex.Store({
 					alert(error);
 				});
 		},
-
 		weatherForecast({ commit }, payload) {
 			let city = encodeURIComponent(payload.city);
 			let unit = payload.unit;
@@ -87,5 +88,6 @@ export default new Vuex.Store({
 		weatherForecast: (state) => state.weatherForecast,
 		selectedUnit: (state) => state.selectedUnits,
 		toggleForecast: (state) => state.isForecastActive,
+		mapInfo: (state) => state.mapData,
 	},
 });

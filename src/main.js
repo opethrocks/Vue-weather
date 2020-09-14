@@ -15,7 +15,7 @@ import {
 	faLongArrowAltUp,
 	faLongArrowAltDown,
 	faAngleDown,
-	faMapMarkerAlt,
+	faMapMarker,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -38,7 +38,7 @@ library.add(faSun);
 library.add(faLongArrowAltUp);
 library.add(faLongArrowAltDown);
 library.add(faAngleDown);
-library.add(faMapMarkerAlt);
+library.add(faMapMarker);
 
 Vue.config.productionTip = false;
 Vue.use(VueSkycons);

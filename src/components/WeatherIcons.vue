@@ -107,6 +107,13 @@
 			size="256"
 			v-if="conditions === 'Fog'"
 		/>
+		<skycon
+			paused="true"
+			condition="fog"
+			color="#626164"
+			size="256"
+			v-if="conditions === 'Smoke'"
+		/>
 	</div>
 </template>
 
@@ -118,7 +125,6 @@ export default {
 			timeOfDay: null,
 		};
 	},
-
 	props: {
 		conditions: {
 			type: String,

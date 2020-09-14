@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Weather</router-link> |
+      <router-link to="/">Conditions</router-link> |
       <router-link to="/weather-maps">Maps</router-link>
     </div>
     <router-view />
@@ -12,7 +12,7 @@
 export default {};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   padding: 5em 5em 5em 5em;
 }
@@ -33,7 +33,7 @@ export default {};
     color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #0097cc;
     }
   }
 }

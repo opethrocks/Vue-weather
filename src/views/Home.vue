@@ -1,16 +1,11 @@
 <template>
 	<div>
-		<div class="flex-container">
-			<figure class="image is-128x128">
-				<img src="@/assets/weather-icon.png" />
-			</figure>
-		</div>
 		<div class="columns is-centered">
 			<div class="column is-one-third">
 				<div class="field">
 					<div class="control has-icons-left has-icons-right">
 						<input
-							class="input is-info"
+							class="input is-info is-rounded"
 							type="text"
 							placeholder="Search for a city"
 							v-model="input"
@@ -23,14 +18,14 @@
 						</span>
 
 						<button
-							class="button is-info"
+							class="button is-rounded is-info is-small"
 							style="margin-top: 1em; margin-right: 1em"
 							@click="searchImperial"
 						>
 							Imperial
 						</button>
 						<button
-							class="button is-success"
+							class="button is-rounded is-success is-small"
 							style="margin-top: 1em"
 							@click="searchMetric"
 						>
@@ -40,14 +35,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="card">
-			<current-conditions
-				:forecastWeather="weatherForecast"
-				:currentWeather="currentWeather"
-				:unitSelected="selectedUnit"
-				:isActive="toggleForecast"
-			/>
-		</div>
+		<current-conditions
+			:forecastWeather="weatherForecast"
+			:currentWeather="currentWeather"
+			:unitSelected="selectedUnit"
+			:isActive="toggleForecast"
+		/>
 	</div>
 </template>
 
@@ -123,13 +116,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-container {
 	display: flex;
 	justify-content: center;
 	flex-flow: row wrap;
-}
-.card {
-	margin: 25px 200px 30px 200px;
 }
 </style>

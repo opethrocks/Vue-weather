@@ -105,6 +105,7 @@ export default {
       this.input = null;
     }
   },
+
   created() {
     this.units = 'imperial';
     this.weather({

@@ -15,17 +15,20 @@
           {{ Math.round(currentWeather.main.temp) }}{{ formatUnits }}
         </p>
         <div id="icon">
-          <i id="icon-color" :class="`wi wi-owm-${getWeather[0].icon}`"></i>
+          <i
+            :style="{ color: randomColor() }"
+            :class="`wi wi-owm-${getWeather[0].icon}`"
+          ></i>
         </div>
-        <p class="has-text-weight-medium">
+        <p class="has-text-weight-semibold">
           <font-awesome-icon icon="wind" />
           Wind: {{ Math.round(currentWeather.wind.speed) }} Mph
         </p>
-        <p class="has-text-weight-medium">
+        <p class="has-text-weight-semibold">
           <font-awesome-icon icon="water" /> Humidity:
           {{ currentWeather.main.humidity }}%
         </p>
-        <p class="has-text-weight-medium">
+        <p class="has-text-weight-semibold">
           <font-awesome-icon icon="sun" />
           <font-awesome-icon icon="long-arrow-alt-up" />
           Sunrise:
@@ -36,7 +39,7 @@
             })
           }}
         </p>
-        <p class="pb-2 has-text-weight-medium">
+        <p class="pb-2 has-text-weight-semibold">
           <font-awesome-icon icon="sun" />
           <font-awesome-icon icon="long-arrow-alt-down" />
           Sunset:
@@ -113,6 +116,9 @@ export default {
   methods: {
     toggleForecast() {
       this.$store.dispatch('toggleForecast');
+    },
+    randomColor() {
+      return '#' + (((1 << 24) * Math.random()) | 0).toString(16);
     }
   },
   computed: {

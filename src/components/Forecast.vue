@@ -13,7 +13,7 @@
             v-for="weather in forecast.weather"
             :key="weather.id"
           >
-            <p class="has-text-weight-medium">
+            <p class="has-text-weight-semibold">
               {{
                 new Date(forecast.dt_txt).toLocaleDateString([], {
                   month: '2-digit',
@@ -22,7 +22,7 @@
                 })
               }}
             </p>
-            <p class="has-text-weight-medium">
+            <p class="has-text-weight-semibold">
               {{
                 new Date(forecast.dt_txt).toLocaleTimeString([], {
                   hour: '2-digit',
@@ -31,14 +31,17 @@
               }}
             </p>
             <div id="icon">
-              <i id="icon-color" :class="`wi wi-owm-${weather.icon}`"></i>
+              <i
+                :style="{ color: randomColor() }"
+                :class="`wi wi-owm-${weather.icon}`"
+              ></i>
             </div>
 
-            <p class="has-text-weight-medium" id="description">
+            <p class="has-text-weight-semibold" id="description">
               <font-awesome-icon icon="thermometer-half" />
               {{ Math.round(forecast.main.temp_max) }}{{ formatUnits }}
             </p>
-            <p class="has-text-weight-medium" id="description">
+            <p class="has-text-weight-semibold" id="description">
               {{ weather.description }}
             </p>
           </div>
@@ -91,6 +94,9 @@ export default {
   methods: {
     toggleConditions() {
       this.$store.dispatch('toggleForecast');
+    },
+    randomColor() {
+      return '#' + (((1 << 24) * Math.random()) | 0).toString(16);
     }
   },
   computed: {

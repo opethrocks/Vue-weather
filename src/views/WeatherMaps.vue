@@ -8,6 +8,7 @@ import 'leaflet-openweathermap';
 import 'leaflet.locatecontrol';
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
 import * as L from 'leaflet';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -19,6 +20,9 @@ export default {
       precipitationLayer: null,
       center: [30.214575081187988, -93.21830749511719]
     };
+  },
+  computed: {
+    ...mapGetters(['cityCoords'])
   },
   mounted() {
     var detailed = L.tileLayer(
@@ -53,7 +57,7 @@ export default {
       opacity: 0.5
     });
     this.map = L.map('map', {
-      center: [40.84706035607122, -96.15234375],
+      center: this.center,
       zoom: 4,
       layers: [street, detailed]
     });
@@ -73,16 +77,6 @@ export default {
       this.map
     );
     L.control.layers(baseMaps, overlayMaps).addTo(this.map);
-    // const options = { timeout: 10000, enableHighAccuracy: true };
-    // function success(position) {
-    // 	const lat = position.coords.latitude;
-    // 	const lng = position.coords.longitude;
-    // 	this.currentPosition.push([lat, lng]);
-    // }
-    // function error(err) {
-    // 	alert(err.message);
-    // }
-    // navigator.geolocation.getCurrentPosition(success, error, options);
 
     this.map.addControl(
       L.control.locate({

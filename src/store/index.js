@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import data from '../data/city.list.json';
 
 Vue.use(Vuex);
 
@@ -10,7 +11,7 @@ export default new Vuex.Store({
     weatherForecast: null,
     selectedUnits: '',
     isForecastActive: false,
-    mapData: null
+    cityData: data
   },
   mutations: {
     ADD_WEATHER(state, payload) {
@@ -30,6 +31,7 @@ export default new Vuex.Store({
       state.currentWeather = null;
       state.weatherForecast = null;
     },
+
     TOGGLE_FORECAST(state) {
       state.isForecastActive === false
         ? (state.isForecastActive = true)
@@ -38,12 +40,12 @@ export default new Vuex.Store({
   },
   actions: {
     currentWeather({ commit }, payload) {
-      let city = encodeURIComponent(payload.city);
+      let city = payload.city;
       let unit = payload.unit;
       const apiKey = process.env.VUE_APP_API_KEY;
       axios({
         method: 'GET',
-        url: `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`,
+        url: `https://api.openweathermap.org/data/2.5/weather?id=${city}&appid=${apiKey}`,
         params: {
           units: unit
         }
@@ -53,16 +55,18 @@ export default new Vuex.Store({
           commit('SET_UNIT', unit);
         })
         .catch((error) => {
-          alert(error);
+          if (error.response) {
+            alert(error.message);
+          }
         });
     },
     weatherForecast({ commit }, payload) {
-      let city = encodeURIComponent(payload.city);
+      let city = payload.city;
       let unit = payload.unit;
       const apiKey = process.env.VUE_APP_API_KEY;
       axios({
         method: 'GET',
-        url: `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`,
+        url: `https://api.openweathermap.org/data/2.5/forecast?id=${city}&appid=${apiKey}`,
         params: {
           units: unit
         }
@@ -72,7 +76,9 @@ export default new Vuex.Store({
           commit('SET_UNIT', unit);
         })
         .catch((error) => {
-          alert(error);
+          if (error.response) {
+            alert(error.message);
+          }
         });
     },
     deleteCity({ commit }) {
@@ -88,6 +94,6 @@ export default new Vuex.Store({
     weatherForecast: (state) => state.weatherForecast,
     selectedUnit: (state) => state.selectedUnits,
     toggleForecast: (state) => state.isForecastActive,
-    mapInfo: (state) => state.mapData
+    cityData: (state) => state.cityData
   }
 });

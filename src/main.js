@@ -3,7 +3,6 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './../node_modules/bulma/css/bulma.css';
-import VueSkycons from 'vue-skycons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
@@ -19,6 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import './../node_modules/weather-icons-lite/css/weather-icons-lite.css';
+import './../node_modules/vue2-animate/dist/vue2-animate.min.css';
 
 //leaflet, fix icon issue
 import { Icon } from 'leaflet';
@@ -42,7 +42,6 @@ library.add(faAngleDown);
 library.add(faMapMarker);
 
 Vue.config.productionTip = false;
-Vue.use(VueSkycons);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 new Vue({

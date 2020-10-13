@@ -1,74 +1,113 @@
 <template>
   <div>
-    <div class="columns is-centered">
-      <div class="column is-one-third">
+    <div class="dropdown-container">
+      <div
+        class="dropdown is-left"
+        :class="{ 'is-active': activeStateDropdown }"
+        @mouseenter="toggleStateDropdown"
+        @mouseleave="toggleStateDropdown"
+      >
+        <div class="dropdown-trigger">
+          <button
+            class="button"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu3"
+          >
+            <span>{{ stateCase(stateDropdownText) }}</span>
+            <span class="icon is-right" id="icon">
+              <i class="fa fa-angle-double-down"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+          <div class="dropdown-content" id="dropdown-flex">
+            <a
+              href="#"
+              class="dropdown-item"
+              :class="{ 'is-active': state.isActive }"
+              v-for="state in states"
+              :key="state.name"
+              @click="selectStateDropdownItem(state)"
+            >
+              {{ stateCase(state.name) }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <h3 class="pl-2 pr-2 pt-1 is-size-5 has-text-weight-semibold">OR</h3>
+      <div>
         <div
-          class="dropdown"
-          :class="{ 'is-active': dropdown }"
-          id="state-select"
-          @click="showDropdown"
+          class="dropdown is-right"
+          :class="{ 'is-active': activeCountryDropdown }"
+          @mouseenter="toggleCountryDropdown"
+          @mouseleave="toggleCountryDropdown"
         >
           <div class="dropdown-trigger">
             <button
               class="button"
               aria-haspopup="true"
-              aria-controls="dropdown-menu4"
+              aria-controls="dropdown-menu3"
             >
-              <span>State: {{ selectedState }}</span>
-              <span class="icon is-small">
-                <font-awesome-icon icon="angle-down" />
+              <span>{{ countryDropdownText }}</span>
+              <span class="icon is-right" id="icon">
+                <i class="fa fa-angle-double-down"></i>
               </span>
             </button>
           </div>
-          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-            <div class="dropdown-content" id="dropdown">
+          <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+            <div class="dropdown-content" id="dropdown-flex">
               <a
-                v-for="(state, index) in stateList"
-                :key="index"
                 href="#"
                 class="dropdown-item"
-                :class="{ 'is-active': state.isActive }"
-                @click="selectItem(state)"
+                :class="{ 'is-active': country.isActive }"
+                v-for="country in countries"
+                :key="country.name"
+                @click="selectCountryDropdownItem(country)"
               >
-                {{ state.name }}
+                {{ country.name }}
               </a>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="field">
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input is-info is-rounded"
-              type="text"
-              placeholder="Search for city"
-              v-model.lazy="input"
-            />
-            <span class="icon is-left">
-              <font-awesome-icon icon="search" />
-            </span>
-            <span class="icon is-right">
-              <a class="delete is-small" @click="clearForm"></a>
-            </span>
-
-            <button
-              class="button is-rounded is-info is-small"
-              style="margin-top: 1em; margin-right: 1em"
-              @click="searchImperial"
-            >
-              Imperial
-            </button>
-            <button
-              class="button is-rounded is-success is-small"
-              style="margin-top: 1em"
-              @click="searchMetric"
-            >
-              Metric
-            </button>
-          </div>
+    <div class="flex-container">
+      <div class="field" id="input">
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input is-info is-rounded"
+            type="text"
+            placeholder="Search for city"
+            v-model.lazy="input"
+            @keyup.enter="searchImperial"
+          />
+          <span class="icon is-left">
+            <font-awesome-icon icon="search" />
+          </span>
+          <span class="icon is-right">
+            <a class="delete is-small" @click="clearCity"></a>
+          </span>
         </div>
       </div>
     </div>
+    <div class="flex-container">
+      <button
+        class="button is-rounded is-info is-small"
+        style="margin-top: 1em; margin-right: 1em"
+        @click="searchImperial"
+      >
+        Imperial
+      </button>
+      <button
+        class="button is-rounded is-success is-small"
+        style="margin-top: 1em"
+        @click="searchMetric"
+      >
+        Metric
+      </button>
+    </div>
+    <br />
     <transition name="fade">
       <div v-if="currentWeather">
         <current-conditions
@@ -76,7 +115,7 @@
           :currentWeather="currentWeather"
           :unitSelected="selectedUnit"
           :isActive="toggleForecast"
-          :cityData="getCityData"
+          :cityData="currentCity.data"
         />
       </div>
     </transition>
@@ -86,6 +125,8 @@
 <script>
 import CurrentConditions from '@/components/CurrentConditions.vue';
 import { mapGetters, mapActions } from 'vuex';
+import worldCountries from '../../public/countries.js';
+import states from '../../public/states.js';
 
 export default {
   name: 'Home',
@@ -95,40 +136,40 @@ export default {
   data() {
     return {
       input: null,
-      city: 'Lake Charles',
-      units: 'imperial',
+      state: null,
+      country: null,
+      city: null,
+      units: null,
       cityCode: null,
-      stateList: [],
-      countryList: [],
-      selectedState: 'LA',
-      dropdown: false
+      countries: worldCountries,
+      states: states,
+      activeStateDropdown: false,
+      activeCountryDropdown: false,
+      stateDropdownText: 'Select State',
+      countryDropdownText: 'Select Country'
     };
   },
   computed: {
-    getCityData() {
-      return this.cityData.filter(
-        (obj) => obj.state === this.selectedState && obj.name === this.city
-      );
-    },
     getCityCode() {
-      return this.getCityData.map((obj) => obj.id);
+      return this.currentCity.data.map((obj) => obj.id);
     },
     getCityCoords() {
-      return this.getCityData.map((obj) => obj.coord);
+      return this.currentCity.data.map((obj) => obj.coord);
     },
     ...mapGetters([
       'currentWeather',
       'weatherForecast',
       'selectedUnit',
       'toggleForecast',
-      'cityData'
+      'currentCity'
     ])
   },
   methods: {
-    ...mapActions(['currentWeather', 'weatherForecast']),
+    ...mapActions(['currentWeather', 'weatherForecast', 'addCity']),
     ...mapActions({
       weather: 'currentWeather',
-      forecast: 'weatherForecast'
+      forecast: 'weatherForecast',
+      addCity: 'addCity'
     }),
 
     searchImperial() {
@@ -138,16 +179,24 @@ export default {
         .map((word) => word[0].toUpperCase() + word.substr(1))
         .join(' ');
       this.city = str;
-      this.cityCode = this.getCityCode[0];
       this.units = 'imperial';
-      this.weather({
-        city: this.cityCode,
-        unit: this.units
+
+      this.addCity({
+        city: this.city,
+        state: this.state,
+        country: this.country
       });
-      this.forecast({
-        city: this.cityCode,
-        unit: this.units
-      });
+      setTimeout(() => {
+        this.cityCode = this.getCityCode[0];
+        this.weather({
+          city: this.cityCode,
+          unit: this.units
+        });
+        this.forecast({
+          city: this.cityCode,
+          unit: this.units
+        });
+      }, 500);
     },
     searchMetric() {
       let str = this.input
@@ -156,56 +205,62 @@ export default {
         .map((word) => word[0].toUpperCase() + word.substr(1))
         .join(' ');
       this.city = str;
-      this.cityCode = this.getCityCode[0];
       this.units = 'metric';
-      this.weather({
-        city: this.cityCode,
-        unit: this.units
+
+      this.addCity({
+        city: this.city,
+        state: this.state,
+        country: this.country
       });
-      this.forecast({
-        city: this.cityCode,
-        unit: this.units
-      });
+
+      setTimeout(() => {
+        this.cityCode = this.getCityCode[0];
+        this.weather({
+          city: this.cityCode,
+          unit: this.units
+        });
+        this.forecast({
+          city: this.cityCode,
+          unit: this.units
+        });
+      }, 500);
     },
-    clearForm() {
+    clearCity() {
       this.input = null;
     },
-    selectItem(event) {
-      this.stateList.map((state) => (state.isActive = false));
-      event.isActive = true;
-      this.selectedState = event.name;
+    toggleStateDropdown() {
+      this.activeStateDropdown === false
+        ? (this.activeStateDropdown = true)
+        : (this.activeStateDropdown = false);
     },
-    showDropdown() {
-      this.dropdown === false
-        ? (this.dropdown = true)
-        : (this.dropdown = false);
+    toggleCountryDropdown() {
+      this.activeCountryDropdown === false
+        ? (this.activeCountryDropdown = true)
+        : (this.activeCountryDropdown = false);
+    },
+    selectStateDropdownItem(state) {
+      this.states.map((item) => (item.isActive = false));
+      state.isActive = true;
+      this.state = state.abbreviation;
+      this.stateDropdownText = state.name;
+      this.country = null;
+      this.countryDropdownText = 'Select Country';
+    },
+    selectCountryDropdownItem(country) {
+      this.countries.map((item) => (item.isActive = false));
+      country.isActive = true;
+      this.country = country.abbreviation;
+      this.countryDropdownText = country.name;
+      this.state = null;
+      this.stateDropdownText = 'Select State';
+    },
+    stateCase(state) {
+      return state
+        .toLowerCase()
+        .split(' ')
+        .map((word) => word[0].toUpperCase() + word.substr(1))
+        .join(' ');
     }
-  },
-
-  created() {
-    this.cityData.filter((obj) => {
-      if (obj.state != '') {
-        this.stateList.push(obj.state);
-      }
-    });
-    this.stateList.sort().shift();
-    this.stateList = this.stateList.filter(
-      (cur, ind, arr) => arr.indexOf(cur) === ind
-    );
-    this.stateList = this.stateList.map((state) =>
-      Object.assign({ name: state, isActive: false })
-    );
-  },
-  mounted() {
-    this.cityCode = this.getCityCode[0];
-    this.weather({
-      city: this.cityCode,
-      unit: this.units
-    });
-    this.forecast({
-      city: this.cityCode,
-      unit: this.units
-    });
   }
 };
 </script>
@@ -214,16 +269,22 @@ export default {
 .flex-container {
   display: flex;
   justify-content: center;
-  flex-flow: row wrap;
 }
-#dropdown {
-  height: 300px;
-  width: 100px;
+#input {
+  margin: 0.5em;
+}
+.dropdown-container {
+  display: flex;
+  justify-content: center;
+  margin: 1em;
+}
+#dropdown-flex {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  height: 40em;
 }
-#state-select {
-  margin: 0em 1em 1em 0em;
+#icon {
+  padding-left: 0.5em;
 }
 </style>

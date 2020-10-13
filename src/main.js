@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import './../node_modules/bulma/css/bulma.css';
+import 'bulma/css/bulma.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
@@ -13,12 +13,12 @@ import {
   faSun,
   faLongArrowAltUp,
   faLongArrowAltDown,
-  faAngleDown,
-  faMapMarker
+  faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import './../node_modules/weather-icons-lite/css/weather-icons-lite.css';
-import './../node_modules/vue2-animate/dist/vue2-animate.min.css';
+import 'weather-icons-lite/css/weather-icons-lite.css';
+import 'vue2-animate/dist/vue2-animate.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 //leaflet, fix icon issue
 import { Icon } from 'leaflet';
@@ -39,7 +39,6 @@ library.add(faSun);
 library.add(faLongArrowAltUp);
 library.add(faLongArrowAltDown);
 library.add(faAngleDown);
-library.add(faMapMarker);
 
 Vue.config.productionTip = false;
 Vue.component('font-awesome-icon', FontAwesomeIcon);

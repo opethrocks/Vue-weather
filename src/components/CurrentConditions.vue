@@ -1,12 +1,21 @@
 <template>
   <div>
     <div class="flex-container">
-      <transition name="fade">
+      <transition
+        name="bounce"
+        enter-active-class="bounceInLeft"
+        leave-active-class="bounceOutRight"
+      >
         <div v-if="!isActive">
           <div class="box" id="round-corners">
-            <p class="label is-size-3 pt-3">
+            <p class="label is-size-3 pt-3" v-if="cityData[0].state">
               <font-awesome-icon icon="location-arrow" />
               {{ cityData[0].name }}, {{ cityData[0].state }}
+            </p>
+            <p class="label is-size-3 pt-3" v-else>
+              <font-awesome-icon icon="location-arrow" />
+              {{ cityData[0].name }},
+              {{ cityData[0].country }}
             </p>
 
             <p class="is-size-4 has-text-weight-semibold capitalize">
@@ -32,8 +41,7 @@
             </p>
             <p class="has-text-weight-semibold">
               <font-awesome-icon icon="sun" />
-              <font-awesome-icon icon="long-arrow-alt-up" />
-              Sunrise:
+              <font-awesome-icon icon="long-arrow-alt-up" /> Sunrise:
               {{
                 new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString(
                   [],

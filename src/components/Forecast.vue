@@ -1,11 +1,19 @@
 <template>
   <div>
-    <transition name="fade">
+    <transition
+      name="bounce"
+      enter-active-class="bounceInLeft"
+      leave-active-class="bounceOutRight"
+    >
       <div v-if="isActive">
         <div class="box">
-          <p class="label is-size-3 pt-3">
+          <p class="label is-size-3 pt-3" v-if="cityData[0].state">
             <font-awesome-icon icon="location-arrow" />
             {{ cityData[0].name }}, {{ cityData[0].state }}
+          </p>
+          <p class="label is-size-3 pt-3" v-else>
+            <font-awesome-icon icon="location-arrow" />
+            {{ cityData[0].name }}, {{ cityData[0].country }}
           </p>
           <h1 class="label is-size-4">12 hour forecast</h1>
           <div class="flex-container">
@@ -19,8 +27,7 @@
                   {{
                     new Date(forecast.dt_txt).toLocaleDateString([], {
                       month: '2-digit',
-                      day: '2-digit',
-                      year: '2-digit'
+                      day: '2-digit'
                     })
                   }}
                 </p>
@@ -41,7 +48,7 @@
 
                 <p class="has-text-weight-semibold" id="description">
                   <font-awesome-icon icon="thermometer-half" />
-                  {{ Math.round(forecast.main.temp_max) }}{{ formatUnits }}
+                  {{ Math.round(forecast.main.temp) }}{{ formatUnits }}
                 </p>
                 <p class="has-text-weight-semibold" id="description">
                   {{ weather.description }}

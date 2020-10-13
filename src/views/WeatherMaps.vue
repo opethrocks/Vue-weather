@@ -81,7 +81,8 @@ export default {
     this.map.addControl(
       L.control.locate({
         locateOptions: {
-          enableHighAccuracy: true
+          enableHighAccuracy: true,
+          setView: true
         },
         watch: true,
         icon: 'fa fa-map-marker'
